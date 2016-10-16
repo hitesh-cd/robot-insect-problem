@@ -19,13 +19,25 @@ class room:
 
 	@property
 	def topCoordinates(self):
+		"""
+		:return: tuple of top coordinates of room
+		"""
 		return (self._topX, self._topY)
 
 	@property
 	def bottomCoordinates(self):
+		"""
+		:return: tuple of bottom coordinates of room
+		"""
 		return (self._bottomX, self._bottomY)
 
 	def _validateProperties(self, x, y):
+		"""
+		This function will validate the coordinates taken by user input
+		:param x:
+		:param y:
+		:return:
+		"""
 		flag = False
 		if type(x) == int and type(y) == int:
 			if x > 0 and y > 0:
