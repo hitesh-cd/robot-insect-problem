@@ -1,14 +1,19 @@
-class insect:
+from robot import robot
+
+
+class insect(robot):
 	TURN_COMMAND_SET = set(['L', 'R'])
 	MOVE_COMMAND_SET = set(['F'])
 
 	DIRECTIONS = ['N', 'E', 'S', 'W']
 
-	def __init__(self, initialX, initialY, initialDirection):
+	def __init__(self, initialX, initialY, initialDirection, room):
+		super(insect, self).__init__(room=room)
 		self._validateProperties(initialX, initialY, initialDirection)
 		self._posX = initialX
 		self._posY = initialY
 		self._indexDirection = insect.DIRECTIONS.index(initialDirection)
+		self._validateCurrentPosition()
 
 	@property
 	def coordinates(self):
@@ -26,6 +31,10 @@ class insect:
 		else:
 			raise Exception("some error")
 
+	def _validateCurrentPosition(self):
+		# have to check if x,y of insect are in bounds of room
+		pass
+
 	def _movePosition(self, command):
 		if command == 'F':
 			if self._indexDirection == 0:
@@ -36,10 +45,12 @@ class insect:
 				self._posY -= 1
 			else:
 				self._posX -= 1
+			self._validateCurrentPosition()
 		else:
 			raise Exception("some error")
 
 	def _validateProperties(self, initialX, initialY, initialDirection):
+		#have to check various inputs, for
 		pass
 
 	def _validateSequenceOfCommands(self, sequence):
@@ -54,9 +65,3 @@ class insect:
 				self._turnPosition(command)
 			else:
 				self._movePosition(command)
-
-
-if __name__ == "__main__":
-	ins = insect(3, 3, 'E')
-	ins.navigate("FFRFFRFRRF")
-	print ins.coordinates()

@@ -1,4 +1,15 @@
+class SingletonType(type):
+	def __call__(cls, *args, **kwargs):
+		try:
+			return cls.__instance
+		except AttributeError:
+			cls.__instance = super(SingletonType, cls).__call__(*args, **kwargs)
+			return cls.__instance
+
+
 class room:
+	__metaclass__ = SingletonType #making a singleton class
+
 	def __init__(self, topX, topY):
 		self._validateProperties(topX, topY)
 		self._topX = topX
@@ -19,5 +30,5 @@ class room:
 
 
 if __name__ == "__main__":
-	r = room(5,5)
-	print r.bottomCoordinates,r.topCoordinates
+	r1 = room(5, 5)
+	print r1.bottomCoordinates, r1.topCoordinates
