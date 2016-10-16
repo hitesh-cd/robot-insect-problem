@@ -4,6 +4,7 @@ from buildings import room
 if __name__ == "__main__":
 	try:
 		roomX, roomY = map(int, raw_input().strip().split(" "))
+		roomObj = room(roomX, roomY)
 		while True:
 			insectCoordinates = raw_input().strip().split(" ")
 			if len(insectCoordinates) != 3:
@@ -11,7 +12,7 @@ if __name__ == "__main__":
 			insectInstructions = raw_input()
 			if insectInstructions == "":
 				break
-			insectObj = insect(room=room(roomX, roomY), initialX=int(insectCoordinates[0]),
+			insectObj = insect(room=roomObj, initialX=int(insectCoordinates[0]),
 							   initialY=int(insectCoordinates[1]), initialDirection=insectCoordinates[2])
 			insectObj.navigate(insectInstructions)
 			finalCoordinates = insectObj.coordinates

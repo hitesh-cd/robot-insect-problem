@@ -8,7 +8,7 @@ class SingletonType(type):
 
 
 class room:
-	__metaclass__ = SingletonType #making a singleton class
+	__metaclass__ = SingletonType  # making a singleton class
 
 	def __init__(self, topX, topY):
 		self._validateProperties(topX, topY)
@@ -26,7 +26,12 @@ class room:
 		return (self._bottomX, self._bottomY)
 
 	def _validateProperties(self, x, y):
-		pass
+		flag = False
+		if type(x) == int and type(y) == int:
+			if x > 0 and y > 0:
+				flag = True
+		if flag == False:
+			raise Exception("Improper Input for Room Properties")
 
 
 if __name__ == "__main__":

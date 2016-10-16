@@ -29,13 +29,26 @@ class insect(robot):
 			if self._indexDirection < 0:
 				self._indexDirection = len(insect.DIRECTIONS) - 1
 		else:
-			raise Exception("some error")
+			raise Exception("Unknown Error: Insect")  # as this
 
 	def _validateCurrentPosition(self):
+		if not (self._isValidCurrentPosition()):
+			raise Exception("Insect Coordinates Are out of Bounds of Room")
+
+	def _isValidCurrentPosition(self):
 		# have to check if x,y of insect are in bounds of room
-		pass
+		topCoordinatesRoom = self._deployedRoom.topCoordinates
+		botttomCoordinatesRoom = self._deployedRoom.bottomCoordinates
+		flag = False
+		if self._posX >= botttomCoordinatesRoom[0] and self._posY >= botttomCoordinatesRoom[1] and self._posX <= \
+				topCoordinatesRoom[0] and self._posY <= topCoordinatesRoom[1]:
+			flag = True
+
+		return flag
 
 	def _movePosition(self, command):
+		_posX = self._posX
+		_posY = self._posY
 		if command == 'F':
 			if self._indexDirection == 0:
 				self._posY += 1
@@ -45,23 +58,35 @@ class insect(robot):
 				self._posY -= 1
 			else:
 				self._posX -= 1
-			self._validateCurrentPosition()
+			if not (self._isValidCurrentPosition()):
+				# if going out of bound revert it back
+				self._posY = _posY
+				self._posX = _posX
+				raise Exception("Invalid Instruction Set for Insect")
 		else:
-			raise Exception("some error")
+			raise Exception("Unknown Error: Insect")
 
 	def _validateProperties(self, initialX, initialY, initialDirection):
-		#have to check various inputs, for
-		pass
+		flag = False
+		if type(initialX) == int and type(initialY) == int and type(initialDirection) == str:
+			if initialDirection in insect.DIRECTIONS and initialX >= 0 and initialY >= 0:
+				flag = True
+
+		if flag == False:
+			raise Exception("Improper Input Coordinates for Insect Properties")
 
 	def _validateSequenceOfCommands(self, sequence):
 		for command in sequence:
 			if command not in insect.TURN_COMMAND_SET and command not in insect.MOVE_COMMAND_SET:
-				raise Exception("not a valid sequence")
+				raise Exception("Invalid Input Sequence for Insect")
 
 	def navigate(self, sequence):
 		self._validateSequenceOfCommands(sequence)
-		for command in sequence:
-			if command in insect.TURN_COMMAND_SET:
-				self._turnPosition(command)
-			else:
-				self._movePosition(command)
+		try:
+			for command in sequence:
+				if command in insect.TURN_COMMAND_SET:
+					self._turnPosition(command)
+				else:
+					self._movePosition(command)
+		except Exception as e:
+			print e, " Error Occured: Can't move Further"
