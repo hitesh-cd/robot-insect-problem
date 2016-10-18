@@ -1,15 +1,23 @@
-class SingletonType(type):
-	def __call__(cls, *args, **kwargs):
-		try:
-			return cls.__instance
-		except AttributeError:
-			cls.__instance = super(SingletonType, cls).__call__(*args, **kwargs)
-			return cls.__instance
+def singleton(cls):
+	def getinstance(*args, **kwargs):
+		if cls not in singleton.instances:
+			singleton.instances[cls] = cls(*args, **kwargs)
+		return singleton.instances[cls]
+
+	return getinstance
 
 
+singleton.instances = {}
+
+
+def clearSingleton():
+	# only for testing purposes
+	singleton.instances = {}
+
+
+@singleton
 class room:
-	__metaclass__ = SingletonType  # making a singleton class
-
+	# using decorator to make it singleton
 	def __init__(self, topX, topY):
 		self._validateProperties(topX, topY)
 		self._topX = topX
